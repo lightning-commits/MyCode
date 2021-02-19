@@ -1,0 +1,85 @@
+package com.yun;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class TestMain1 {
+	
+	private static Map<Character, String[]> map = new HashMap<>();
+    static {
+        map.put('0',new String[]{});
+        map.put('1',new String[]{});
+        map.put('2',new String[]{"a", "b", "c"});
+        map.put('3',new String[]{"d", "e", "f"});
+        map.put('4',new String[]{"g", "h", "i"});
+        map.put('5',new String[]{"j", "k", "l"});
+        map.put('6',new String[]{"m", "n", "o"});
+        map.put('7',new String[]{"p", "q", "r", "s"});
+        map.put('8',new String[]{"t", "u", "v"});
+        map.put('9',new String[]{"w", "x", "y", "z"});
+    }
+    
+    //迭代法
+    public List<String> letterCompose(String number) {
+        List<String> result = new ArrayList<>();
+        //迭代number的字符
+        for (int i = 0; i < number.length(); i++) {
+        	//每次用result保存上次的结果，在传入新的需要拼接的字母
+            result = getComposeResult(result, map.get(number.charAt(i)));
+        }
+        return result;
+    }
+
+    public List<String> getComposeResult(List<String> list, String[] array) {
+    	//如果array.length==0表示 传的是0和1 不用处理 直接返回
+        if (array.length == 0) {
+            return list;
+        }
+        //如果list.size==0 表示是第一次进来,那么array也是第一个数字对应的字母 比如23 那么array对应 就是map里面key=2对应的value(abc)
+        if (list.size() == 0) {
+            return Arrays.asList(array);
+        }
+        List<String> result = new ArrayList<>();
+        for (String li: list) {
+            for (String arr: array) {
+                result.add(li + arr);
+            }
+        }
+        return result;
+    }
+    
+    //递归法
+    public List<String> letterComposeRecursion(String number) {
+       
+      
+        return getComposeResultRecursion(number, 0);
+    }
+
+    public List<String> getComposeResultRecursion(String input,int index) {
+    	//当递归达到临界条件返回数据,也就是返回input的最后一个字符对应的字母 比如23 返回的就是map中key=3对应的value(def)
+        if (index==input.length()-1) {
+            return 	Arrays.asList(map.get(input.charAt(index)));
+        }
+        //递归 拿到当前返回数据
+        List<String> next= getComposeResultRecursion(input,++index);
+        //获取当前返回数据的前一个key对应的数据 比如23  那么next=3对应的value(def) current对应的就是key=2的value(abc)
+        List<String> current=Arrays.asList(map.get(input.charAt(index-1)));
+        //拼接起来
+        List<String> result=new ArrayList<String>();
+        for (String l: current) {
+            for (String a: next) {
+            	result.add(l + a);
+            }
+        }
+        //返回给上一层递归的数据
+        return result;
+    }
+    public static void main(String[] args) {
+    	System.out.println(new TestMain1().letterComposeRecursion("234"));
+	}
+
+}
