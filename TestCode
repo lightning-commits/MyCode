@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+//电话号码组合代码
 public class TestMain1 {
 	
 	private static Map<Character, String[]> map = new HashMap<>();
